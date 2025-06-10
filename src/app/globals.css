@@ -20,7 +20,59 @@
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Remove static background and font-family so Tailwind classes and layout.tsx can control them */
+}
+
+/* Tailwind CSS imports */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Animations */
+@layer utilities {
+  .animate-blob {
+    animation: blob 8s infinite ease-in-out;
+  }
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+  .animation-delay-4000 {
+    animation-delay: 4s;
+  }
+  .animate-fade-in-up {
+    animation: fadeInUp 1.2s cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes blob {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  33% {
+    transform: translateY(-30px) scale(1.1);
+  }
+  66% {
+    transform: translateY(20px) scale(0.9);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn-clear {
+  @apply border border-white text-white bg-transparent rounded-lg px-8 py-4 font-semibold transition-all duration-300 shadow-none hover:bg-black hover:text-white hover:border-white focus:outline-none;
 }
