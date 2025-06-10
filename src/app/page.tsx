@@ -1,6 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+// Register Chart.js components
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Home() {
   const [showScroll, setShowScroll] = useState(false);
@@ -9,29 +14,120 @@ export default function Home() {
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+  
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  
+  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   const [hovered, setHovered] = useState<string | null>(null);
+
+  const marketStats = [
+    { label: 'Nigerian Energy Access', value: 60, subtitle: 'Population lacking reliable power', color: '#60a5fa' },
+    { label: 'Annual Economic Loss', value: 75, subtitle: '₦10T+ lost to poor power', color: '#818cf8' },
+    { label: 'Affected Population', value: 85, subtitle: '85M people in energy poverty', color: '#6366f1' },
+    { label: 'Grid Power', value: 40, subtitle: '4000MW average generation', color: '#4f46e5' }
+  ];
+
+  const createChartData = (value: number, color: string) => ({
+    datasets: [{
+      data: [value, 100 - value],
+      backgroundColor: [color, '#1f2937'],
+      borderWidth: 0,
+      cutout: '75%'
+    }]
+  });
 
   return (
     <main className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white relative overflow-hidden">
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center pt-32 px-4 text-center relative">
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-4 animate-fade-in-up">
-          UNLOCK POTENTIAL
-        </h1>
-        <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mx-auto mb-6 animate-fade-in-up delay-200"></div>
-        <p className="text-xl md:text-2xl mb-8 text-blue-100 animate-fade-in-up delay-400 max-w-2xl mx-auto">
-          Strategic finance meets operational excellence. Axinity Partners provides
-          the precision, networks, and execution that transform energy sector
-          challenges into opportunities for sustainable growth.
+      <section className="relative min-h-[90vh] bg-white text-gray-900">
+        {/* Background Image Layer */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-[url('/Hero_image.png')] bg-center bg-cover bg-no-repeat opacity-100"></div>
+        </div>
+        
+        {/* Content Layer */}
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 text-center pt-32">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-6">
+              UNLOCK{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                POTENTIAL
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl mb-8 text-gray-700 max-w-3xl mx-auto">
+              Strategic finance meets operational excellence. Axinity Partners provides
+              the precision, networks, and execution that transform energy sector
+              challenges into opportunities for sustainable growth.
+            </p>
+            <div className="flex flex-col md:flex-row gap-4 justify-center">
+              <a
+                href="#services"
+                onClick={(e) => scrollToSection(e, 'services')}
+                className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg transition-all duration-300 text-lg rounded-md"
+              >
+                Explore Our Services
+              </a>
+              <a
+                href="#contact"
+                onClick={(e) => scrollToSection(e, 'contact')}
+                className="px-8 py-4 bg-transparent border-2 border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white transition-all duration-300 text-lg rounded-md"
+              >
+                Contact Us
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Market Statistics Section */}
+      <section className="py-20 px-4 max-w-7xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
+          Nigeria&apos;s Energy Market
+        </h2>
+        <p className="text-lg text-blue-200 mb-12 max-w-3xl mx-auto text-center">
+          Africa&apos;s largest economy stands at the cusp of an energy revolution,
+          presenting unprecedented opportunities for strategic investors and partners.
         </p>
-        <div className="flex flex-col md:flex-row gap-4 justify-center animate-fade-in-up delay-600">
-          <a href="#services" className="btn-clear">
-            Explore Services
-          </a>
-          <a href="#contact" className="btn-clear">
-            Contact Us
-          </a>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          {marketStats.map((stat, index) => (
+            <div 
+              key={index}
+              className="bg-white/5 backdrop-blur-sm p-6 rounded-xl border border-white/10 text-center hover-scale animate-fade-in-scale"
+              style={{ animationDelay: `${index * 0.2}s` }}
+            >
+              <div className="relative w-32 h-32 mx-auto mb-4">
+                <Doughnut 
+                  data={createChartData(stat.value, stat.color)}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      legend: { display: false },
+                      tooltip: { enabled: false }
+                    }
+                  }}
+                />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-white stat-value">{stat.value}%</span>
+                </div>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">{stat.label}</h3>
+              <p className="text-sm text-blue-200">{stat.subtitle}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-12 text-center">
+          <p className="text-blue-200 max-w-3xl mx-auto mb-8">
+            With landmark regulatory reforms and massive discoveries driving renewed international 
+            investment, Nigeria&apos;s energy sector presents a unique opportunity for sophisticated 
+            investors and ambitious local producers.
+          </p>
         </div>
       </section>
 
@@ -50,10 +146,11 @@ export default function Home() {
               sustainable growth opportunities.
             </p>
             <a
-              href="#services"
+              href="#contact"
+              onClick={(e) => scrollToSection(e, 'contact')}
               className="inline-block px-8 py-4 bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 transition-all duration-300 text-lg"
             >
-              EXPLORE SERVICES
+              PARTNER WITH US
             </a>
           </div>
 

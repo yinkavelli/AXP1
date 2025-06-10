@@ -38,6 +38,7 @@ export default function Header() {
         </Link>
         <nav className="hidden md:flex gap-12 text-lg font-medium justify-center items-center w-full text-white font-sans">
           <Link href="/" className="hover:text-blue-400 transition-colors">Home</Link>
+          <Link href="/market" className="hover:text-blue-400 transition-colors">Market</Link>
           <Link href="/about" className="hover:text-blue-400 transition-colors">About</Link>
           {/* Services Dropdown */}
           <div
@@ -102,6 +103,7 @@ export default function Header() {
       {/* Mobile menu overlay */}
       <nav className={`fixed top-0 left-0 w-full h-full bg-black/80 z-40 flex flex-col items-center justify-center gap-12 text-2xl font-semibold animate-fade-in-up ${menuOpen ? '' : 'hidden'}`}>
           <Link href="/" className="text-white hover:text-blue-400" onClick={() => setMenuOpen(false)}>Home</Link>
+          <Link href="/market" className="text-white hover:text-blue-400" onClick={() => setMenuOpen(false)}>Market</Link>
           <Link href="/about" className="text-white hover:text-blue-400" onClick={() => setMenuOpen(false)}>About</Link>
           <Link href="/strategic-advisory" className="text-white hover:text-blue-400" onClick={() => setMenuOpen(false)}>Services</Link>
           <Link href="/network" className="text-white hover:text-blue-400" onClick={() => setMenuOpen(false)}>Network</Link>

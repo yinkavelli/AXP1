@@ -3,6 +3,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 @theme inline {
@@ -16,6 +19,9 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
@@ -48,6 +54,13 @@ body {
   .delay-400 {
     animation-delay: 0.4s;
   }
+  .animate-scale-up {
+    animation: scaleUp 0.6s ease-in-out;
+  }
+  .animate-fade-in-scale {
+    opacity: 0;
+    animation: fadeInScale 0.8s ease-out forwards;
+  }
 }
 
 @keyframes blob {
@@ -73,6 +86,41 @@ body {
   }
 }
 
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 .btn-clear {
   @apply border border-white text-white bg-transparent rounded-lg px-8 py-4 font-semibold transition-all duration-300 shadow-none hover:bg-black hover:text-white hover:border-white focus:outline-none;
+}
+
+.hover-scale {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-scale:hover .stat-value {
+  animation: scaleUp 0.6s ease-in-out;
 }
